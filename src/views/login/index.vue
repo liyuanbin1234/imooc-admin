@@ -1,6 +1,11 @@
 <template>
   <div class="login-container">
-    <el-form class="login-form">
+    <el-form
+      class="login-form"
+      :model="loginForm"
+      :rules="loginRules"
+      ref="loginFormRef"
+    >
       <div class="title-container">
         <h3 class="title">用户登录</h3>
       </div>
@@ -9,19 +14,34 @@
         <span class="svg-container">
           <svg-icon icon="user" />
         </span>
-        <el-input placeholder="username" name="username" type="text"></el-input>
+        <el-input
+          placeholder="username"
+          name="username"
+          type="text"
+          v-model="loginForm.username"
+        ></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon="password" />
         </span>
-        <el-input placeholder="password" name="password"></el-input>
-        <span class="show-pwd">
-          <svg-icon icon="eye" />
+        <el-input
+          placeholder="password"
+          name="password"
+          :type="passwordType"
+          v-model="loginForm.password"
+        ></el-input>
+        <span class="show-pwd" @click="onChangePwdType">
+          <svg-icon :icon="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width: 100%; margin-bottom: 30px">
+      <el-button
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        :loading="loading"
+        @click="onHandleLogin"
+      >
         登陆
       </el-button>
     </el-form>
@@ -29,7 +49,68 @@
 </template>
 
 <script lang="ts" setup>
-import {} from 'vue'
+import { ref } from 'vue'
+import { validatePassword } from './rules'
+import { useStore } from 'vuex'
+import { ElForm } from 'element-plus'
+type ElFormType = InstanceType<typeof ElForm> | null
+
+// 登陆数据
+const loginForm = ref({
+  username: 'super-admin',
+  password: '123456'
+})
+// 登陆规则
+const loginRules = ref({
+  username: [
+    {
+      required: true,
+      trigger: 'blur',
+      message: '用户名为必填项'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      trigger: 'blur',
+      validator: validatePassword()
+    }
+  ]
+})
+
+// 密码框类型
+const passwordType = ref('password')
+// 密码框类型切换
+const onChangePwdType = () => {
+  if (passwordType.value === 'password') {
+    passwordType.value = 'text'
+  } else {
+    passwordType.value = 'password'
+  }
+}
+
+// 登陆按钮 loading
+const loading = ref(false)
+const loginFormRef = ref<ElFormType>(null)
+const store = useStore()
+const onHandleLogin = () => {
+  loginFormRef.value?.validate((valid: unknown) => {
+    if (!valid) {
+      return false
+    } else {
+      loading.value = true
+      store
+        .dispatch('user/login', loginForm.value)
+        .then(() => {
+          loading.value = false
+        })
+        .catch((err) => {
+          console.log(err)
+          loading.value = false
+        })
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
