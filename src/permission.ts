@@ -5,14 +5,17 @@ import store from '@/store'
 const whiteList = ['/login']
 
 // 全局路由前置守卫
-router.beforeEach((to, from, next) => {
-  console.log('jinru', store.getters.token)
+router.beforeEach(async (to, from, next) => {
   // 有 token
   if (store.getters.token) {
     // 不可以进入 login 页面
     if (to.path === '/login') {
       next('/')
     } else {
+      // 没有用户信息就去请求用户信息
+      if (!store.getters.hasUserInfo) {
+        await store.dispatch('user/loadUserInfo')
+      }
       next()
     }
   } else {

@@ -1,6 +1,7 @@
-import { login } from '@/api/sys'
-import { setItem, getItem } from '@/utils/storage'
+import { login, getUserInfo } from '@/api/sys'
+import { setItem, getItem, removeAllItem } from '@/utils/storage'
 import { TOKEN } from '@/constant/index'
+import { setTimeStamp } from '@/utils/auth'
 import router from '@/router'
 import md5 from 'md5'
 // userInfo 数据类型
@@ -10,18 +11,23 @@ interface userInfo {
 }
 // state 数据类型
 interface state {
-  token: string
+  token: string;
+  userInfo: object
 }
 
 export default {
   namespaced: true,
   state: () => ({
-    token: getItem(TOKEN) || ''
+    token: getItem(TOKEN) || '',
+    userInfo: {}
   }),
   mutations: {
     setToken: (state: state, token: string) => {
       state.token = token
       setItem(TOKEN, token)
+    },
+    setUserInfo: (state: state, userInfo: object) => {
+      state.userInfo = userInfo
     }
   },
   actions: {
@@ -35,9 +41,25 @@ export default {
         }).then((data: any) => {
           context.commit('setToken', data.token)
           router.push('/')
+          // 设置时间戳
+          setTimeStamp()
           resolve(data)
         }).catch(err => reject(err))
       })
+    },
+    // 获取用户信息
+    async loadUserInfo(context: any) {
+      const res = await getUserInfo()
+      context.commit('setUserInfo', res)
+      console.log(res)
+      return res
+    },
+    // 退出登陆
+    logout(context: any) {
+      context.commit('setToken', '')
+      context.commit('setUserInfo', {})
+      removeAllItem()
+      router.push('/login')
     }
   }
 }

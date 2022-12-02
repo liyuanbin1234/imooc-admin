@@ -1,5 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
+import { isCheckTimeout } from '@/utils/auth'
+import store from '@/store'
 
 // 处理【类型'AxiosResponse<any, any>'上不存在属性'xxx'】问题
 declare module 'axios' {
@@ -19,10 +21,20 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig => {
+  (config: AxiosRequestConfig): any => {
     config.headers = config.headers || {}
     config.headers.icode = 'A748D538DF8D2A6A'
+    if (store.getters.token) {
+      if (isCheckTimeout()) {
+        store.dispatch('user/logout')
+        return Promise.reject(new Error('token 失效'))
+      }
+      config.headers.Authorization = `Bearer ${store.getters.token}`
+    }
     return config
+  },
+  (error: any): any => {
+    return Promise.reject(error)
   }
 )
 
@@ -37,6 +49,11 @@ service.interceptors.response.use(
       return Promise.reject(new Error(message))
     }
   }, (error: any): any => {
+    // true表示 token 过期，false没过期
+    if (error.response && error.response.data && error.response.data.code === 401) {
+      // 过期退出登陆
+      store.dispatch('user/logout')
+    }
     ElMessage.error(error.message)
     return new Error(error)
   }
