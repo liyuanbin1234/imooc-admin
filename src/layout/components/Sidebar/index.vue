@@ -1,7 +1,15 @@
 <template>
-  <div>sidebar</div>
+  <div>
+    <h1>占位</h1>
+    <el-scrollbar>
+      <sidebar-menu></sidebar-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import SidebarMenu from './SidebarMenu.vue'
+import {} from 'vue'
+</script>
 
-<style></style>
+<style lang="scss" scoped></style>
