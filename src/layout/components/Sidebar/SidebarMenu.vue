@@ -2,6 +2,7 @@
   <!-- 一级菜单 -->
   <el-menu
     :uniqueOpened="true"
+    :collapse="!$store.getters.sidebarOpened"
     :default-active="activeMenu"
     :background-color="$store.getters.cssVar.menuBg"
     :text-color="$store.getters.cssVar.menuText"
@@ -26,10 +27,8 @@ import SidebarItem from './SidebarItem.vue'
 const router = useRouter()
 const routes = computed(() => {
   const filterRoutes = filterRouters(router.getRoutes())
-  console.log(filterRoutes)
   return generateMenus(filterRoutes)
 })
-console.log(routes.value)
 
 // 默认展开项
 const route = useRoute()
