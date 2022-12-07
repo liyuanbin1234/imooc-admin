@@ -7,7 +7,8 @@
       ref="loginFormRef"
     >
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">{{ $t('msg.login.title') }}</h3>
+        <lang-select class="lang-select" effect="light"></lang-select>
       </div>
 
       <el-form-item prop="username">
@@ -42,8 +43,9 @@
         :loading="loading"
         @click="onHandleLogin"
       >
-        登陆
+        {{ $t('msg.login.loginBtn') }}
       </el-button>
+      <div class="tips" v-html="$t('msg.login.desc')"></div>
     </el-form>
   </div>
 </template>
@@ -52,9 +54,12 @@
 import { ref } from 'vue'
 import { validatePassword } from './rules'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import LangSelect from '@/components/LangSelect/index.vue'
 import { ElForm } from 'element-plus'
 type ElFormType = InstanceType<typeof ElForm> | null
 
+const i18n = useI18n()
 // 登陆数据
 const loginForm = ref({
   username: 'super-admin',
@@ -66,7 +71,7 @@ const loginRules = ref({
     {
       required: true,
       trigger: 'blur',
-      message: '用户名为必填项'
+      message: i18n.t('msg.login.usernameRule')
     }
   ],
   password: [
@@ -176,6 +181,17 @@ $cursor: #fff;
       text-align: center;
       font-weight: bold;
     }
+
+    :deep .lang-select {
+      position: absolute;
+      top: 4px;
+      right: 0;
+      background-color: #fff;
+      font-size: 22px;
+      padding: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   }
 
   .show-pwd {
@@ -186,6 +202,13 @@ $cursor: #fff;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .tips {
+    font-size: 16px;
+    line-height: 28px;
+    color: #fff;
+    margin-bottom: 10px;
   }
 }
 </style>

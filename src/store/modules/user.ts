@@ -51,7 +51,6 @@ export default {
     async loadUserInfo(context: any) {
       const res = await getUserInfo()
       context.commit('setUserInfo', res)
-      console.log(res)
       return res
     },
     // 退出登陆
