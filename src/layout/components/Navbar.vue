@@ -5,6 +5,8 @@
     <!-- 面包屑 -->
     <breadcrumb class="breadcrumb-container"></breadcrumb>
     <div class="right-menu">
+      <!-- 选择主题色 -->
+      <theme-select class="right-menu-item hover-effect"></theme-select>
       <!-- 国际化 -->
       <lang-select class="right-menu-item hover-effect"></lang-select>
       <!-- 头像 -->
@@ -40,6 +42,8 @@ import { useStore } from 'vuex'
 import Hamburger from '@/components/Hamburger/index.vue'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import LangSelect from '@/components/LangSelect/index.vue'
+import ThemeSelect from '@/components/ThemeSelect/index.vue'
+
 const store = useStore()
 const logout = () => {
   store.dispatch('user/logout')
@@ -76,7 +80,7 @@ const logout = () => {
     float: right;
     padding-right: 16px;
 
-    ::v-deep .right-menu-item {
+    :deep(.right-menu-item) {
       display: inline-block;
       padding: 0 18px 0 0;
       font-size: 24px;
@@ -88,7 +92,7 @@ const logout = () => {
       }
     }
 
-    ::v-deep .avatar-container {
+    :deep(.avatar-container) {
       cursor: pointer;
       .avatar-wrapper {
         margin-top: 5px;

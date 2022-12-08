@@ -69,7 +69,7 @@ const linkHoverColor = ref(store.getters.cssVar.menuBg)
     }
   }
 
-  ::v-deep .no-redirect {
+  :deep(.no-redirect) {
     color: #97a8be;
     cursor: text;
   }
