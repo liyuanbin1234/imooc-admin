@@ -1,7 +1,7 @@
 // 保存 storage
 export const setItem = (key: string, value: any) => {
   if (typeof value === 'object') {
-    value = JSON.parse(value)
+    value = JSON.stringify(value)
   }
   window.localStorage.setItem(key, value)
 }

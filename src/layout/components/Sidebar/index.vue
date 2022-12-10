@@ -31,7 +31,6 @@ const logoHeight = 44
   justify-content: center;
   .el-avatar {
     --el-avatar-background-color: none;
-    margin-right: 12px;
   }
   .logo-title {
     margin-left: 10px;
