@@ -10,6 +10,11 @@ interface changeTagsView {
   index: number; tag: any;
 }
 
+interface payload {
+  type: string;
+  index: number;
+}
+
 export default {
   namespaced: true,
   state: () => ({
@@ -43,6 +48,20 @@ export default {
      */
     changeTagsView(state: state, { index, tag }: changeTagsView) {
       state.tagsViewList[index] = tag
+      setItem(TAGS_VIEW, state.tagsViewList)
+    },
+    /**
+     * 删除 tag
+     */
+    removeTagsView(state: state, payload: payload) {
+      if (payload.type === 'index') {
+        state.tagsViewList.splice(payload.index, 1)
+      } else if (payload.type === 'other') {
+        state.tagsViewList.splice(payload.index + 1, state.tagsViewList.length - payload.index + 1)
+        state.tagsViewList.splice(0, payload.index)
+      } else if (payload.type === 'right') {
+        state.tagsViewList.splice(payload.index + 1, state.tagsViewList.length - payload.index + 1)
+      }
       setItem(TAGS_VIEW, state.tagsViewList)
     }
   }

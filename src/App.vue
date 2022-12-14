@@ -41,7 +41,6 @@ const getTitle = (route: any): string => {
 watch(
   route,
   (to) => {
-    console.log(isTags(to.path))
     if (isTags(to.path)) {
       const { fullPath, meta, name, params, path, query } = to
       store.commit('app/addTagsViewList', {
