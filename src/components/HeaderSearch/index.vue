@@ -1,10 +1,11 @@
 <template>
   <div class="header-search" :class="{ show: isShow }">
     <svg-icon
+      id="guide-search"
       class="search-icon"
       icon="search"
       @click.stop="onShowClick"
-    ></svg-icon>
+    />
     <el-select
       ref="headerSearchSelectRef"
       class="header-search-select"
