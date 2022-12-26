@@ -57,17 +57,27 @@ watch(
   { immediate: true }
 )
 
-watchSwitchLang(() => {
-  store.getters.tagsViewList.forEach((route: any, index: number) => {
-    store.commit('app/changeTagsView', {
-      index,
-      tag: {
-        ...route,
-        title: getTitle(route)
-      }
+// 监听语言变化
+watchSwitchLang(
+  // tagsView 语言变化
+  () => {
+    store.getters.tagsViewList.forEach((route: any, index: number) => {
+      store.commit('app/changeTagsView', {
+        index,
+        tag: {
+          ...route,
+          title: getTitle(route)
+        }
+      })
     })
-  })
-})
+  },
+  // 个人信息接口 语言变化
+  () => {
+    if (store.getters.token) {
+      store.dispatch('user/loadUserInfo')
+    }
+  }
+)
 </script>
 
 <style></style>

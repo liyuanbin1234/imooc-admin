@@ -31,6 +31,8 @@ service.interceptors.request.use(
       }
       config.headers.Authorization = `Bearer ${store.getters.token}`
     }
+    // 处理接口国际化
+    config.headers['Accept-Language'] = store.getters.language
     return config
   },
   (error: any): any => {

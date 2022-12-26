@@ -1,43 +1,60 @@
 <template>
-  <div class="">
-    <el-pagination
-      v-model:current-page="currentPage4"
-      v-model:page-size="pageSize4"
-      :page-sizes="[100, 200, 300, 400]"
-      :small="small"
-      :disabled="disabled"
-      :background="background"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-    <el-row class="mb-4">
-      <el-button>Default</el-button>
-      <el-button type="primary">Primary</el-button>
-      <el-button type="success">Success</el-button>
-      <el-button type="info">Info</el-button>
-      <el-button type="warning">Warning</el-button>
-      <el-button type="danger">Danger</el-button>
+  <div class="my-container">
+    <el-row>
+      <el-col :span="6">
+        <project-card class="project-card" :features="featureData">
+        </project-card>
+      </el-col>
+      <el-col :span="18">
+        <el-card>
+          <el-tabs v-model="activeName">
+            <el-tab-pane :label="$t('msg.profile.feature')" name="feature">
+              <feature :features="featureData" />
+            </el-tab-pane>
+            <el-tab-pane :label="$t('msg.profile.chapter')" name="chapter">
+              <chapter />
+            </el-tab-pane>
+            <el-tab-pane :label="$t('msg.profile.author')" name="author">
+              <author />
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ProjectCard from './components/ProjectCard.vue'
+import Chapter from './components/Chapter.vue'
+// eslint-disable-next-line
+import Feature from './components/Feature.vue'
+import Author from './components/Author.vue'
+import { feature } from '@/api/user'
+import { watchSwitchLang } from '@/utils/i18n'
 
-const currentPage4 = ref(4)
-const pageSize4 = ref(100)
-const small = ref(false)
-const background = ref(false)
-const disabled = ref(false)
+enum ActiveNameEnum {
+  Feature = 'feature',
+  Chapter = 'chapter',
+  Author = 'author'
+}
 
-const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+const activeName = ref<ActiveNameEnum>(ActiveNameEnum.Feature)
+
+const featureData = ref<any>([])
+const getFeatureData = async () => {
+  featureData.value = await feature()
 }
-const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
-}
+getFeatureData()
+
+watchSwitchLang(getFeatureData)
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-container {
+  .project-card {
+    margin-right: 20px;
+  }
+}
+</style>
