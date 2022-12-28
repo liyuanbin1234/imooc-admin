@@ -10,10 +10,13 @@ import '@/styles/index.scss'
 import installIcons from '@/icons'
 // 导入路由鉴权
 import '@/permission'
+// 全局过滤器
+import installFilters from '@/filters'
 
 const app = createApp(App)
 installElementPlus(app)
 installIcons(app)
+installFilters(app)
 app
   .use(store)
   .use(router)
