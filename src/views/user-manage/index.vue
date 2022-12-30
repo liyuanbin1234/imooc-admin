@@ -2,10 +2,12 @@
   <div class="user-manage-container">
     <el-card class="header">
       <div>
-        <el-button type="primary" @click="onUploadClick">{{
-          $t('msg.excel.importExcel')
-        }}</el-button>
-        <el-button type="success">{{ $t('msg.excel.exportExcel') }} </el-button>
+        <el-button type="primary" @click="onUploadClick">
+          {{ $t('msg.excel.importExcel') }}
+        </el-button>
+        <el-button type="success" @click="onExportExcelClick">
+          {{ $t('msg.excel.exportExcel') }}
+        </el-button>
       </div>
     </el-card>
     <!-- table -->
@@ -54,7 +56,7 @@
           fixed="right"
           width="300"
         >
-          <template #default>
+          <template #default="{ row }">
             <div>
               <el-button size="mini" type="primary">
                 {{ $t('msg.excel.show') }}
@@ -62,7 +64,7 @@
               <el-button size="mini" type="info">
                 {{ $t('msg.excel.showRole') }}
               </el-button>
-              <el-button size="mini" type="danger">
+              <el-button size="mini" type="danger" @click="onRemoveClick(row)">
                 {{ $t('msg.excel.remove') }}
               </el-button>
             </div>
@@ -77,17 +79,22 @@
         :page-size="size"
         :page-sizes="[2, 5, 10, 20]"
         :total="total"
-        layout="total, sizes, prev, next, pager, jumper"
+        layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
     </el-card>
+    <export-to-excel v-model="exportToExcelVisible"></export-to-excel>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onActivated } from 'vue'
-import { getUserManageList } from '@/api/user-manage'
+import { getUserManageList, deleteUser } from '@/api/user-manage'
 import { watchSwitchLang } from '@/utils/i18n'
 import { useRouter } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+import ExportToExcel from './components/Export2Excel.vue'
+
 // 数据相关
 const tableData = ref([])
 const total = ref(0)
@@ -116,11 +123,32 @@ const handleCurrentChange = (currentPage: number) => {
   page.value = currentPage
   loadUserManageList()
 }
+const i18n = useI18n()
+const onRemoveClick = (row: any) => {
+  ElMessageBox.confirm(
+    i18n.t('msg.excel.dialogTitle1') +
+      row.username +
+      i18n.t('msg.excel.dialogTitle2'),
+    {
+      type: 'warning'
+    }
+  ).then(async () => {
+    await deleteUser(row._id)
+    ElMessage.success(i18n.t('msg.excel.removeSuccess'))
+    loadUserManageList()
+  })
+}
 
 const router = useRouter()
 // 上传按钮点击事件
 const onUploadClick = () => {
   router.push('/user/import')
+}
+
+// 导出Excel
+const exportToExcelVisible = ref<boolean>(false)
+const onExportExcelClick = () => {
+  exportToExcelVisible.value = true
 }
 </script>
 
