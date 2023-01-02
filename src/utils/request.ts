@@ -23,7 +23,7 @@ const service = axios.create({
 service.interceptors.request.use(
   (config: AxiosRequestConfig): any => {
     config.headers = config.headers || {}
-    config.headers.icode = 'A748D538DF8D2A6A'
+    config.headers.icode = '3D7CCFB8184F6097'
     if (store.getters.token) {
       if (isCheckTimeout()) {
         store.dispatch('user/logout')

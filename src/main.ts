@@ -12,11 +12,14 @@ import installIcons from '@/icons'
 import '@/permission'
 // 全局过滤器
 import installFilters from '@/filters'
+// 全局指令
+import installDirectives from '@/directives'
 
 const app = createApp(App)
 installElementPlus(app)
 installIcons(app)
 installFilters(app)
+installDirectives(app)
 app
   .use(store)
   .use(router)

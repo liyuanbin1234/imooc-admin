@@ -58,7 +58,11 @@
         >
           <template #default="{ row }">
             <div>
-              <el-button size="mini" type="primary">
+              <el-button
+                size="mini"
+                type="primary"
+                @click="onShowClick(row._id)"
+              >
                 {{ $t('msg.excel.show') }}
               </el-button>
               <el-button size="mini" type="info">
@@ -101,6 +105,10 @@ const total = ref(0)
 const page = ref(1)
 const size = ref(2)
 
+// 实例相关
+const router = useRouter()
+const i18n = useI18n()
+
 // 请求数据
 const loadUserManageList = async () => {
   const result: any = await getUserManageList({
@@ -123,7 +131,6 @@ const handleCurrentChange = (currentPage: number) => {
   page.value = currentPage
   loadUserManageList()
 }
-const i18n = useI18n()
 const onRemoveClick = (row: any) => {
   ElMessageBox.confirm(
     i18n.t('msg.excel.dialogTitle1') +
@@ -138,8 +145,10 @@ const onRemoveClick = (row: any) => {
     loadUserManageList()
   })
 }
+const onShowClick = (id: string) => {
+  router.push(`/user/info/${id}`)
+}
 
-const router = useRouter()
 // 上传按钮点击事件
 const onUploadClick = () => {
   router.push('/user/import')

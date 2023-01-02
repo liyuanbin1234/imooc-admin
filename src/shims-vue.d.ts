@@ -21,3 +21,5 @@ declare module '*.json' {
 }
 // 解决 css-color-function 引入报错
 declare module 'css-color-function'
+// 解决 vue3-print-nb 引入报错
+declare module 'vue3-print-nb'

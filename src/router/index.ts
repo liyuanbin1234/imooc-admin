@@ -42,6 +42,7 @@ const privateRoutes: Array<RouteRecordRaw> = [
         path: '/user/info/:id',
         name: 'userInfo',
         component: () => import('@/views/user-info/index.vue'),
+        props: true, // 当前页面被路由传递的参数以 props 的方式接收
         meta: {
           title: 'userInfo'
         }
