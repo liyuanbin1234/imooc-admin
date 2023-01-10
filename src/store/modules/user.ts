@@ -2,8 +2,9 @@ import { login, getUserInfo } from '@/api/sys'
 import { setItem, getItem, removeAllItem } from '@/utils/storage'
 import { TOKEN } from '@/constant/index'
 import { setTimeStamp } from '@/utils/auth'
-import router from '@/router'
+import router, { resetRouter } from '@/router'
 import md5 from 'md5'
+
 // userInfo 数据类型
 interface userInfo {
   username: string;
@@ -55,6 +56,7 @@ export default {
     },
     // 退出登陆
     logout(context: any) {
+      resetRouter()
       context.commit('setToken', '')
       context.commit('setUserInfo', {})
       removeAllItem()

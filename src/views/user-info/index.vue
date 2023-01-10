@@ -102,7 +102,6 @@ const props = defineProps({
 const detailData = ref<any>({})
 const loadUserDetail = async () => {
   detailData.value = await getUserDetail(props.id)
-  console.log(detailData.value)
 }
 loadUserDetail()
 watchSwitchLang(loadUserDetail)

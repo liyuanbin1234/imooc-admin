@@ -105,7 +105,6 @@ const onClose = () => {
   headerSearchSelectRef.value?.blur()
   searchOptions.value = []
   isShow.value = false
-  console.log('执行close')
 }
 
 watchSwitchLang((): void => {

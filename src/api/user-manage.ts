@@ -33,6 +33,28 @@ export const getUserDetail = (id: string): any => {
   })
 }
 
+/*
+  获取指定用户角色
+ */
+export const userRoles = (id: string): any => {
+  return request({
+    url: `/user-manage/role/${id}`
+  })
+}
+
+/**
+ * 分用户分配角色
+ */
+export const updateRole = (id: string, roles: any[]) => {
+  return request({
+    url: `/user-manage/update-role/${id}`,
+    method: 'POST',
+    data: {
+      roles
+    }
+  })
+}
+
 /**
  * 批量导入
  */
